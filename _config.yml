@@ -1,0 +1,27 @@
+auto: true
+
+markdown: rdiscount
+permalink: /:categories/:title.html
+url: 
+lsi: false
+pygments: true
+safe: true
+auto: false 
+
+paginate: 8
+paginate_path: "page:num"
+
+# presonal config
+title: Daetalus' Blog
+description: Steven Pan's Blog, powered by Jekyll...
+feed: /atom.xml
+
+author: Steven Pan
+
+seo: 
+  keyword: 
+  description: 
+config:
+  js_dir:
+  img_dir:
+  css_dir:
