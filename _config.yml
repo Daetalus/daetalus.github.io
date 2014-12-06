@@ -13,10 +13,16 @@ paginate_path: "page:num"
 
 # presonal config
 title: Daetalus' Blog
-description: Steven Pan's Blog, powered by Jekyll...
+description: Boxiang Sun's Blog, powered by Jekyll...
 feed: /atom.xml
 
-author: Steven Pan
+author: Boxiang Sun
+
+comments :
+    provider : duoshuo
+    duoshuo :
+        short_name : Sunny2038
+# Sunny2038 is my CSDN and weibo account
 
 seo: 
   keyword: 
