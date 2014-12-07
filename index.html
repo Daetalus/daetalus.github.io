@@ -9,7 +9,7 @@ title: "Daetalus's Blog - powered by Jekyll & GitPages."
 </h1>
 
 
-   {% for post in site.categories.blog %}
+   {% for post in paginator.posts %}
    <h2>
       <a href="{{ post.url }}">{{ post.title }}</a>
 
