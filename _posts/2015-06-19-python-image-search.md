@@ -501,22 +501,7 @@ output.close()
 
 为了索引化我们的相册数据集，打开一个命令行输入下面的命令：
 
-{% highlight shell %}
-$ python index.py --dataset dataset --index index.csv
-{% endhighlight %}
 
-这个脚本运行的很快，完成后将会获得一个名为index.csv的新文件。
-
-使用你最喜欢的文本编辑器打开并查看该文件。
-
-可以看到在.csv文件的每一行，第一项是文件名，第二项是一个数字列表。这个数字列表就是用来表示并量化图像的特征向量。
-
-对index文件运行wc命令，可以看到已经成功对数据集中805幅图像索引化了：
-
-{% highlight shell %}
-$ wc -l index.csv
-    805 index.csv
-{% endhighlight %}
 
 ## 总结
 
