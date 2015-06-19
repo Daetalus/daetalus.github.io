@@ -513,7 +513,10 @@ $ python index.py --dataset dataset --index index.csv
 
 对index文件运行wc命令，可以看到已经成功对数据集中805幅图像索引化了：
 
-
+{% highlight sh %}
+$ wc -l index.csv
+    805 index.csv
+{% endhighlight %}
 
 ## 第三步：搜索器(Searcher)
 
