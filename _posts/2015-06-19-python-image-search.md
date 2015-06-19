@@ -501,7 +501,7 @@ output.close()
 
 为了索引化我们的相册数据集，打开一个命令行输入下面的命令：
 
-{% highlight shell %}
+{% highlight sh %}
 $ python index.py --dataset dataset --index index.csv
 {% endhighlight %}
 
@@ -513,17 +513,14 @@ $ python index.py --dataset dataset --index index.csv
 
 对index文件运行wc命令，可以看到已经成功对数据集中805幅图像索引化了：
 
-{% highlight shell %}
-$ wc -l index.csv
-    805 index.csv
-{% endhighlight %}
+
 
 ## 第三步：搜索器(Searcher)
 
 现在已经从数据集提取了特征了，接下来需要一个方法来比较这些特征，获取相似度。这就是第三步的内容，创建一个类来定义两幅图像的相似矩阵。
 
 创建一个新文件，命名为searcher.py，让我们在这里做点神奇的事情：
-{% highlight python %}
+{% highlight python linenos=True %}
 import numpy as np
 import csv
 
@@ -691,7 +688,7 @@ for (score, resultID) in results:
 ## CBIR系统实战
 
 打开终端，切换到代码所在的目录，执行下面的命令：
-{% highlight python %}
+{% highlight sh %}
 $ python search.py --index index.csv --query queries/108100.png --result-path dataset
 {% endhighlight %}
 
@@ -717,7 +714,7 @@ $ python search.py --index index.csv --query queries/115100.png --result-path da
 这是因为我们使用了本文开头介绍的基于区域的颜色直方图描述符。使用这种图像描述符可以粗略的针对每个区域执行，最后的结果中会含有图像每个区域的像素的密度。
 
 旅途的最后一站是海滩，用下面的命令搜索海滩上的图像：
-{% highlight python %}
+{% highlight sh %}
 $ python search.py --index index.csv --query queries/103300.png --result-path dataset
 {% endhighlight %}
 
@@ -728,7 +725,7 @@ $ python search.py --index index.csv --query queries/103300.png --result-path da
 注意，前3个搜索结果是在相同地点拍摄到的图像。其他图像都含有蓝色的区域。
 
 当然，没有潜水的海滩之旅是不完整的。
-{% highlight shell %}
+{% highlight sh %}
 $ python search.py --index index.csv --query queries/103100.png --result-path dataset
 {% endhighlight %}
 
@@ -739,7 +736,7 @@ $ python search.py --index index.csv --query queries/103100.png --result-path da
 结果非常棒。前5个结果是同一条鱼，前10幅有9幅是水下探险。
 
 最后，一天的旅途结束了，到了观看夕阳的时候：
-{% highlight shell %}
+{% highlight sh %}
 $ python search.py --index index.csv --query queries/127502.png --result-path dataset
 {% endhighlight %}
 
