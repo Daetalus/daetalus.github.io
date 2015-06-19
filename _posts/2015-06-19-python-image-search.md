@@ -699,7 +699,7 @@ $ python search.py --index index.csv --query queries/108100.png --result-path da
 第一幅图像是待搜索的埃及金字塔。我们的目标是在相册中找到相似的图像。可以看到，在相册中找到了去金字塔游玩拍摄的照片。
 
 我们还游览的埃及其他地方，所以用其他照片搜索试试：
-{% highlight python %}
+{% highlight sh %}
 $ python search.py --index index.csv --query queries/115100.png --result-path dataset
 {% endhighlight %}
 
