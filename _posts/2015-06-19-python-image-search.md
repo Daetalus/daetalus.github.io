@@ -496,3 +496,194 @@ output.close()
 现在图像载入内存了，在12行对图像使用图像描述符并提取特征。ColorDescriptor的describe方法返回由浮点数构成的列表，用来量化并表示图像。
 
 这个数字列表，或者说特征向量，含有第一步中图像的5个区域的描述。每个区域由一个直方图表示，含有8 × 12 × 3 = 288项。5个区域总共有5 × 288 = 1440维度。。。因此每个图像使用1440个数字量化并表示。
+
+15和16行简单的将图像的文件名和管理的特征向量写入文件。
+
+为了索引化我们的相册数据集，打开一个命令行输入下面的命令：
+
+{% highlight shell %}
+$ python index.py --dataset dataset --index index.csv
+{% endhighlight %}
+
+这个脚本运行的很快，完成后将会获得一个名为index.csv的新文件。
+
+使用你最喜欢的文本编辑器打开并查看该文件。
+
+可以看到在.csv文件的每一行，第一项是文件名，第二项是一个数字列表。这个数字列表就是用来表示并量化图像的特征向量。
+
+对index文件运行wc命令，可以看到已经成功对数据集中805幅图像索引化了：
+
+{% highlight shell %}
+$ wc -l index.csv
+    805 index.csv
+{% endhighlight %}
+
+## 第三步：搜索器(Searcher)
+
+现在已经从数据集提取了特征了，接下来需要一个方法来比较这些特征，获取相似度。这就是第三步的内容，创建一个类来定义两幅图像的相似矩阵。
+
+创建一个新文件，命名为searcher.py，让我们在这里做点神奇的事情：
+{% highlight python %}
+import numpy as np
+import csv
+
+class Searcher:
+	def __init__(self, indexPath):
+		# store our index path
+		self.indexPath = indexPath
+
+	def search(self, queryFeatures, limit = 10):
+		# initialize our dictionary of results
+		results = {}
+{% endhighlight %}
+
+首先先导入NumPy用于数值计算，csv用于方便的处理index.csv文件。
+
+在第5行定义Searcher类。Searcher类的构造器只需一个参数，indexPath，用于表示index.csv文件在磁盘上的路径。
+
+要实际执行搜索，需要在第10行调用search方法。该方法需要两个参数，queryFeatures是提取自待搜索图像（如向CBIR系统提交并请求返回相似图像的图像），和返回图像的数目的最大值。
+
+最后，在12行初始化results字典。在这里，字典有很用的用途，每个图像有唯一的imageID，可以作为字典的键，而相似度作为字典的值。
+
+好了，现在将注意力放在这里。这里是发生神奇的地方：
+{% highlight python linenos=True %}
+# open the index file for reading
+		with open(self.indexPath) as f:
+			# initialize the CSV reader
+			reader = csv.reader(f)
+
+			# loop over the rows in the index
+			for row in reader:
+				# parse out the image ID and features, then compute the
+				# chi-squared distance between the features in our index
+				# and our query features
+				features = [float(x) for x in row[1:]]
+				d = self.chi2_distance(features, queryFeatures)
+
+				# now that we have the distance between the two feature
+				# vectors, we can udpate the results dictionary -- the
+				# key is the current image ID in the index and the
+				# value is the distance we just computed, representing
+				# how 'similar' the image in the index is to our query
+				results[row[0]] = d
+
+			# close the reader
+			f.close()
+
+		# sort our results, so that the smaller distances (i.e. the
+		# more relevant images are at the front of the list)
+		results = sorted([(v, k) for (k, v) in results.items()])
+
+		# return our (limited) results
+		return results[:limit]
+{% endhighlight %}
+
+在1行打开index.csv文件，在3行获取CSV读取器的句柄，接着在6行循环读取index.csv文件的每一行。
+
+对于每一行，提取出索引化后的图像的颜色直方图，用11行的chi2_distance函数将其与待搜索的图像特征进行比较，该函数在下面介绍。
+
+在32行使用唯一的图像文件名作为键，用与待查找图像的与索引后的图像的相似读作为值来更新results字典。
+
+最后，将results字典根据相似读升序排序。
+
+卡方相似度为零的图片表示完全相同。相似度数值越高，表示两幅图像差别越大。
+
+说到卡方相似读，看下面的源码：
+{% highlight python linenos=True %}
+def chi2_distance(self, histA, histB, eps = 1e-10):
+    # compute the chi-squared distance
+    d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
+        for (a, b) in zip(histA, histB)])
+
+    # return the chi-squared distance
+    return d
+{% endhighlight %}
+
+chi2_distance函数需要两个参数，即用来进行比较的两个直方图。可选的eps值用来预防除零错误。
+
+<span style="color: #000000;">这个函数的名称来自皮尔森的卡方测试统计，用来比较离散概率分布。</span>
+
+由于比较的是颜色<span style="color: #000000;">直方图，根据概率分布的定义，卡方函数是个完美的选择。</span>
+
+一般来说，直方图两端的值的差别并不重要，可以使用权重对其进行处理，卡方距离函数就是这么做的。
+
+还能跟的上吗？我保证，最后一步是最简单的，仅仅需要将前面的各部分组合在一起。
+
+## 第四步：执行搜索
+
+如果我告诉你，执行搜索是最简单的一步，你信吗？实际上，只需一个驱动程序导入前面定义的所有的模块，将其依次组合成具有完整功能的CBIR系统。
+
+所以新建最后一个文件，命名为search.py，这样我们的例子就能完成了：
+{% highlight python linenos=True %}
+# import the necessary packages
+from pyimagesearch.colordescriptor import ColorDescriptor
+from pyimagesearch.searcher import Searcher
+import argparse
+import cv2
+
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-i", "--index", required = True,
+	help = "Path to where the computed index will be stored")
+ap.add_argument("-q", "--query", required = True,
+	help = "Path to the query image")
+ap.add_argument("-r", "--result-path", required = True,
+	help = "Path to the result path")
+args = vars(ap.parse_args())
+
+# initialize the image descriptor
+cd = ColorDescriptor((8, 12, 3))
+{% endhighlight %}
+
+首先导入所需的包，导入第一步的ColorDescriptor来提取待查找图像的特征；导入第三步定义的Searcher类，用于执行执行实际的搜索。
+
+argparse和cv2模块一直会导入。
+
+在8-15行处理命令行参数。我们需要用一个--index来表示index.csv文件的位置。
+
+还需要--query来表示带搜索图像的存储路径。该图像将与数据集中的每幅图像进行比较。目标是找到数据集中欧给你与待搜索图像相似的图像。
+
+想象一下，使用Google搜索并输入“Python OpenCV tutorials”，会希望获得与Python和OpenCV相关的信息。
+
+与之相同，如果针对相册构建一个图像搜索引擎，提交了一副关于云、大海上的帆船的图像，希望通过图像搜索引擎获得相似的图像。
+
+接着需要一个--result-path，用来表示相册数据集的路径。通过这个命令可以选择不同的数据集，向用户显示他们所需要的最终结果。
+
+最后，在18行使用图像描述符提取相同的参数，就如同在索引化那一步做的一样。如果我们是为了比较图像的相似度（事实也正是如此）<span style="color: #000000;">，就无需改变数据集中颜色直方图的bin的数目。</span>
+
+<span style="color: #000000;">直接将第三步中使用的直方图bin的数目作为参数在第四步使用。</span>
+
+这样会保证图像的描述是连续且可比较的。
+
+现在到了进行真正比较的时候：
+{% highlight python linenos=True %}
+# load the query image and describe it
+query = cv2.imread(args["query"])
+features = cd.describe(query)
+
+# perform the search
+searcher = Searcher(args["index"])
+results = searcher.search(features)
+
+# display the query
+cv2.imshow("Query", query)
+
+# loop over the results
+for (score, resultID) in results:
+	# load the result image and display it
+	result = cv2.imread(args["result_path"] + "/" + resultID)
+	cv2.imshow("Result", result)
+	cv2.waitKey(0)
+{% endhighlight %}
+
+在2行从磁盘读取待搜索图像，在3行提取该图像的特征。
+
+在6和7行使用提取到的特征进行搜索，返回经过排序后的结果列表。
+
+到此，所需做的就是将结果显示给用户。
+
+在9行显示出待搜索的图像。接着在13-17行遍历搜索结果，将相应的图像显示在屏幕上。
+
+所有这些工作完成后，就可以实际操作了。
+
+继续阅读，看最终效果如何。
