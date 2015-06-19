@@ -501,7 +501,7 @@ output.close()
 
 为了索引化我们的相册数据集，打开一个命令行输入下面的命令：
 
-{% highlight python %}
+{% highlight sh %}
 $ python index.py --dataset dataset --index index.csv
 {% endhighlight %}
 
