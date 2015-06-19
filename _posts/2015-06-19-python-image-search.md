@@ -193,7 +193,7 @@ categories: [Python]
 
 **这个假设非常重要**，在使用颜色直方图作为图像描述符时，这是个公平且合理的假设。
 
-## 第一步1：定义图像描述符
+## 第一步：定义图像描述符
 
 这里不使用标准的颜色直方图，而是对其进行一些修改，使其更加健壮和强大。
 
@@ -211,7 +211,7 @@ categories: [Python]
 
 还有其他颜色空间能够更好的模拟人眼接收的颜色，如CIE Lab和CIE XYZ颜色空间，但作为第一个图像搜索引擎的实现，先简化使用的色彩模型。
 
-现在选定了颜色空间，接着需要定义直方图中bin的数量。直方图用来粗略的表示图像中各强度像素的密度。本质上，<span style="color: #ff0000;">直方图会估计底层函数的<span style="color: #ff0000; font-size: 12.8000001907349px;">概率<span style="color: #ff0000;">密度。在本例中<span style="color: #000000;">，<span style="font-size: 13px; color: #000000;">P是图像I中像素色彩C出现的概率。</span></span></span></span></span>
+现在选定了颜色空间，接着需要定义直方图中bin的数量。直方图用来粗略的表示图像中各强度像素的密度。本质上，<span style="color: #ff0000;">直方图会估计底层函数的概率</span>密度。在本例中<span style="color: #000000;">，P是图像I中像素色彩C出现的概率。</span></span>
 
 主要注意的是，为直方图选取bin的数目需要不断的权衡。如果选择的bin数目过少，那么直方图含有的数据量就不够，无法区分某些不同颜色分布的图像。反之，如果直方图选取的bin的数目过多，那么其中的组件就过多，导致内容很相近的图片也会判断成不相似。
 
@@ -245,7 +245,7 @@ categories: [Python]
 
 理论讲解的够多了，下面来开始编码。
 
-用你最喜欢的编辑器打开一个新文件，命名为colordescriptor.py。加入下面代码：
+用你最喜欢的编辑器打开一个新文件，命名为`colordescriptor.py`。加入下面代码：
 {% highlight python linenos=True%}
 import numpy as np
 import cv2
@@ -268,9 +268,9 @@ class ColorDescriptor:
 
 首先导入所需的Python模块。用NumPy进行数值处理，用cv2使用OpenCV的Python绑定。
 
-在第五行定义了ColorDescriptor类。该类用来封装所有用于提取图像中3D HSV颜色直方图的逻辑。
+在第五行定义了`ColorDescriptor`类。该类用来封装所有用于提取图像中3D HSV颜色直方图的逻辑。
 
-ColorDescriptor的__init__方法只有一个参数——bins，即颜色直方图中bin的数目。
+`ColorDescriptor`的`__init__`方法只有一个参数——`bins`，即颜色直方图中bin的数目。
 
 在第10行定义describe方法，用于描述指定的图像。
 
