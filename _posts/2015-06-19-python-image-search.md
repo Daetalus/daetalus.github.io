@@ -338,11 +338,7 @@ class ColorDescriptor:
 			# construct a mask for each corner of the image, subtracting
 			# the elliptical center from it
 			cornerMask = np.zeros(image.shape[:2], dtype = "uint8")
-			cv2.rectangle(cornerMask,
-                          (startX, startY),
-                          (endX, endY),
-                          255,
-                          -1)
+			cv2.rectangle(cornerMask, (startX, startY), (endX, endY), 255, -1)
 			cornerMask = cv2.subtract(cornerMask, ellipMask)
 
 			# extract a color histogram from the image, then update the

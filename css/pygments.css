@@ -2,15 +2,16 @@
 /* from http://stackoverflow.com/a/23393920 */
 
 .highlight pre code * {
-  white-space: nowrap;    // this sets all children inside to nowrap
+    white-space: nowrap;    // this sets all children inside to nowrap
 }
 
 .highlight pre {
-  overflow-x: auto;       // this sets the scrolling in x
+    max-width: 100%;
+    /* overflow-x: auto;       // this sets the scrolling in x */
 }
 
 .highlight pre code {
-  white-space: pre;       // forces <code> to respect <pre> formatting
+    white-space: pre;       // forces <code> to respect <pre> formatting
 }
 
 /* github style pygments theme for jekyll */
@@ -24,6 +25,18 @@
 }
 pre {
     color: #7979dd;
+}
+table.highlighttable {
+    overflow-x:auto;
+    display:block;
+}
+
+table.highlighttable td.code {
+    width:100%;
+}
+
+pre code {
+    white-space: pre;
 }
 /*.hll { background-color: #49483e }*/
 .c { color: #75715e } /* Comment */
