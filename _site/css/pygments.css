@@ -30,11 +30,11 @@ pre {
 table.highlighttable {
     overflow-x:auto;
     display:block;
+    white-space: nowrap;
 }
 
 table.highlighttable td.code {
     width:100%;
-    white-space: nowrap;
 }
 
 pre code {
