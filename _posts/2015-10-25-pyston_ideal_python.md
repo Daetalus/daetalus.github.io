@@ -13,6 +13,8 @@ Pyston是采用JIT技术的Python实现，目前刚刚发布0.4版，[这篇文�
 
 为什么这么说呢，因为对Python用户而言，最大的需求在于性能和已有模块的支持这两方面。CPython作为标准的Python实现，现有的Python扩展就是为它量身定做的，但其开发效率堪忧。而PyPy是铁了心要追求效率，对扩展模块的支持比较匮乏。IronPython和Jython则分别在各自的领域发挥作用，不像PyPy是争夺“大统”的。
 
+**更新**：更新了[一篇文章](http://daetalus.github.io/2015/10/26/python_implementation_comparison/)，其中简要介绍了几种常见的Python的实现
+
 PyPy是一款优秀的Python实现（本文中的PyPy是指狭义的Python实现，不包括RPython工具链）,在性能方面作出了很大的提升。但有优点的同时，也有一些根本性的问题阻止她流行开来。
 
 之前有一篇文章介绍过PyPy（[《为什么PyPy是Python的未来》](http://blog.jobbole.com/39757/)）。其中介绍了Python和PyPy的诸多优点，文中大力推介PyPy，但有些地方也有失公允，下面会提到。
