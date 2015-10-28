@@ -9,4 +9,4 @@ title: "关于：About"
 
 daetalusun#gmail.com
 
-同时也寻求长三角地区的工作机会。
+寻求长三角地区的工作机会，简历[在这](/cv.html)。
