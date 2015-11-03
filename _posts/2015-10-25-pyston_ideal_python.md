@@ -7,7 +7,7 @@ category: Python
 
 ## 简介
 
-Pyston是采用JIT技术的Python实现，目前刚刚发布0.4版，[这篇文章](blog.jobbole.com/65414/)对其做了介绍。其中也解释了为什么Dropbox创建一个新的Python实现。Pyston目前仍无法在生产环境中使用，其成熟度仍无法与CPython等其他Python实现相比。
+Pyston是采用JIT技术的Python实现，目前刚刚发布0.4版，[这篇文章](http://blog.jobbole.com/65414/)对其做了介绍。其中也解释了为什么Dropbox创建一个新的Python实现。Pyston目前仍无法在生产环境中使用，其成熟度仍无法与CPython等其他Python实现相比。
 
 同时由于有Unladen Swallow这个先例在前面，所以这里还要加一个前提：只要Pyston坚持下去，那么绝对是各种Python实现中的佼佼者，因为Pyston几乎是理想的Python实现。
 
