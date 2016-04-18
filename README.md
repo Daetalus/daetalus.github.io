@@ -1,9 +1,9 @@
 说明
 ==
 
-这是我的个人博客，基于Bootstrap和Jekyll。
+这是我的个人博客，~~基于Bootstrap和Jekyll。~~，作为Python死忠怎么能用Ruby呢，所以现在迁移到了Pelican。该博客会不断完善中。
 
-在搭建过程中主要参考以下两个博客。
+（在使用Jekyll时）搭建过程中主要参考以下两个博客。
 * Xuewen Pan：http://www.winfirm.cn
 * Beiyuu的博客：http://beiyuu.com
 

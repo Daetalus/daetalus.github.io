@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    <big>归档</big>
+</h1>
+<hr>
+<ul>
+    {% for year, year_articles in articles|groupby('date.year') %}
+    <li>{{ year }}</li>
+    {% for month, month_articles in year_articles|groupby('date.month') %}
+    <ul>
+        <li>{{ month_articles[0].date.strftime('%B') }}</li>
+        <ul class="list-unstyled">
+            {% for article in month_articles %}
+            <li>
+                <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a>
+            </li>
+
+            {% endfor %}
+        </ul>
+    </ul>
+    {% endfor %}
+    {% endfor %}
+</ul>
+{% endblock content %}
